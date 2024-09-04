@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Search Result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+
+    <div>
+        <h2>Hello! Here is the result for query </h2>
+        <h2 th:text="${query}"></h2>
+
+        <br/><br/>
+
+        <span th:text="${response}"></span>
+
+    </div>
+</body>
