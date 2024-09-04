@@ -5,12 +5,8 @@ import com.sd.libappinterf.interfaces.LibAppCommunicatorInterface
 import org.springframework.amqp.core.AmqpTemplate
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.integration.Message
-import org.springframework.integration.core.MessagingTemplate
-import org.springframework.integration.message.GenericMessage
-import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -24,8 +20,8 @@ class LibraryInterfaceController {
     @Autowired
     private lateinit var libAppCommunicator : LibAppCommunicatorInterface
 
-    @Autowired
-    private lateinit var messagingTemplate: MessagingTemplate
+    private var query : String = ""
+    private var rawData : String = ""
 
     @Autowired
     fun initTemplate() {
@@ -66,7 +62,6 @@ class LibraryInterfaceController {
             println("interf : " + message)
             libAppCommunicator.sendMessageToApp(message)
         }
-
     }
 
     @RabbitListener(queues = ["\${libapp.rabbitmq.results}"])
@@ -82,22 +77,18 @@ class LibraryInterfaceController {
         val key = params[0]
         val value = params[1]
 
-        displayResult(parsedResponse[1], operation, value, key)
+        this.query = "${operation.substring(1)} $key $value"
+        this.rawData = parsedResponse[1]
 
     }
 
-    //@SendTo("/{operation}?{value}={key}")
+
     @RequestMapping("/results", method = [RequestMethod.GET])
-    @ResponseBody
-    fun displayResult(body: String, operation:String, value :String, key :String ):String {
-
-        /*
-        val destination = "$operation?$key=$value"
-        val msg: Message<String> = GenericMessage(body)
-        messagingTemplate.send(destination, msg)
-
-         */
-        return body;
+    fun displayResult(model : Model) : String {
+        model.addAttribute("query", query)
+        model.addAttribute("response", rawData)
+        return "result"
     }
+
 
 }
