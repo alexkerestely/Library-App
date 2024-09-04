@@ -1,1 +1,0 @@
-CREATE TABLE IF NOT EXISTS cache (id INT(2) AUTO_INCREMENT PRIMARY KEY, timestamp varchar(60), query varchar(60), result varchar(60));
