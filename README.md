@@ -5,7 +5,7 @@ The project is a services application that simulates an library application with
 Components:
  - interface which takes the web requests
  - main microservice which performs the operations and communicates with cache
- - cache microservice that stores queries and their results in a MYSQL database using Hibernate ORM
+ - cache microservice that stores queries and their results in a MYSQL database using Spring Data JPA
 
 Technology stack:
 - Build with Spring Boot and Maven
